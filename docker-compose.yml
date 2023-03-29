@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: app
+    # platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      # - /app/node_modules
+    ports:
+      - 3000:3000
+      - 5555:5555
+    environment:
+      NODE_ENV: development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: mydb
+    command: yarn dev
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
