@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://postgres:example@localhost:5432/mydb?schema=public
+      DATABASE_URL: postgresql://postgres:example@127.0.0.1:5432/mydb?schema=public
     services:
           db:
             image: postgres:latest
@@ -17,6 +17,8 @@ jobs:
               POSTGRES_USER: postgres
               POSTGRES_PASSWORD: example
               POSTGRES_DB: mydb
+            ports:
+              - 5432:5432
     steps:
       - name: checkout
         uses: actions/checkout@v3
