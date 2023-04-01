@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://postgres:example@127.0.0.1:5432/mydb
+      DATABASE_URL: postgresql://postgres:example@127.0.0.1:5432/mydb?schema=public
     services:
           db:
             image: postgres:latest
@@ -43,6 +43,9 @@ jobs:
 
       - name: playwright-install
         run: npx playwright install --with-deps
+
+      - name: migrate
+        run: npx prisma migrate dev
 
       - name: yarn-test
         run: yarn test
