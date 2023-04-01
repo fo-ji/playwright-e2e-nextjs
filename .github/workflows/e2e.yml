@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://postgres:example@db:5432/mydb?schema=public
+      DATABASE_URL: postgresql://postgres:example@localhost:5432/mydb?schema=public
     services:
           db:
             image: postgres:latest
