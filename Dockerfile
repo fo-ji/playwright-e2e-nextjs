@@ -1,15 +1,10 @@
-FROM mcr.microsoft.com/playwright:v1.17.1-focal
-
-RUN apt-get update && \
-    apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    apt-get clean
+FROM node:18.15.0-bullseye
 
 WORKDIR /app
 
 RUN yarn install --frozen-lockfile
 
-# RUN npx playwright install
+RUN npx playwright install && \
+    npx playwright install-deps
 
 COPY . .
