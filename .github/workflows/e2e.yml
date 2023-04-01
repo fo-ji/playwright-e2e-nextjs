@@ -12,9 +12,8 @@ jobs:
       DATABASE_URL: postgresql://postgres:example@db:5432/mydb?schema=public
     services:
           db:
-            container_name: db
             image: postgres:latest
-            environment:
+            env:
               POSTGRES_USER: postgres
               POSTGRES_PASSWORD: example
               POSTGRES_DB: mydb
