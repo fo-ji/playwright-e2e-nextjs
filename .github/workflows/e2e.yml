@@ -9,7 +9,11 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://postgres:example@127.0.0.1:5432/mydb?schema=public
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      GITHUB_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
     services:
           db:
             image: postgres:latest
