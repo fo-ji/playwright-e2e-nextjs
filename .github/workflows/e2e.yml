@@ -1,0 +1,66 @@
+name: E2E Test
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+    branches-ignore:
+      - main
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      GITHUB_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+    services:
+          db:
+            image: postgres:latest
+            env:
+              POSTGRES_USER: postgres
+              POSTGRES_PASSWORD: example
+              POSTGRES_DB: mydb
+            ports:
+              - 5432:5432
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup-node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.15.0'
+
+      - name: cache-node-modules
+        uses: actions/cache@v3
+        id: node_modules_cache_id
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+
+      - name: yarn-install
+        if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
+        run: yarn install
+
+      - name: playwright-install
+        run: npx playwright install --with-deps
+
+      - name: migrate
+        run: npx prisma migrate dev
+
+      - name: yarn-test
+        run: yarn test
+
+      - name: yarn-build
+        run: yarn build
+
+      - name: upload-artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
