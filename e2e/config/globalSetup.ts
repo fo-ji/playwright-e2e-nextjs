@@ -53,7 +53,7 @@ export default async function globalConfig() {
     {
       name: 'next-auth.session-token',
       value: sessionToken,
-      domain: '127.0.0.1',
+      domain: 'localhost',
       path: '/',
       httpOnly: true,
       sameSite: 'Lax',

@@ -1,24 +1,43 @@
 import type { Note } from '@prisma/client';
 import { cookies } from 'next/headers';
+import axios from 'axios';
 
 async function fetchNotes(token: string | undefined) {
-  const res = await fetch(
-    `${
-      process.env.VERSEL_URL
-        ? `https://${process.env.VERCEL_URL}/api/notes`
-        : `${process.env.NEXTAUTH_URL}/api/notes`
-    }`,
-    {
-      // MEMO: サーバコンポーネントから認証をパスするにはcookieにsession情報を付与する必要がある
-      // MEMO: クライアントコンポーネントでは自動的に付与してくれていた
-      headers: {
-        cookie: `next-auth.session-token=${token}`,
-      },
-    }
-  );
-  if (!res.ok) throw new Error('Failed to fetch data in server');
-  const notes: Note[] = await res.json();
-  return notes;
+  // const res = await fetch(
+  //   `${
+  //     process.env.VERSEL_URL
+  //       ? `https://${process.env.VERCEL_URL}/api/notes`
+  //       : `${process.env.NEXTAUTH_URL}/api/notes`
+  //   }`,
+  //   {
+  //     // MEMO: サーバコンポーネントから認証をパスするにはcookieにsession情報を付与する必要がある
+  //     // MEMO: クライアントコンポーネントでは自動的に付与してくれていた
+  //     headers: {
+  //       cookie: `next-auth.session-token=${token}`,
+  //     },
+  //   }
+  // );
+  // if (!res.ok) throw new Error('Failed to fetch data in server');
+  // const notes: Note[] = await res.json();
+  // return notes;
+  try {
+    const { data }: { data: Note[] } = await axios.get(
+      `${
+        process.env.VERSEL_URL
+          ? `https://${process.env.VERCEL_URL}/api/notes`
+          : `${process.env.NEXTAUTH_URL}/api/notes`
+      }`,
+      {
+        headers: {
+          cookie: `next-auth.session-token=${token}`,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.log({ error });
+    throw new Error('Failed to fetch data in server');
+  }
 }
 
 // MEMO: NextJSではhttpリクエストに含まれるcookieをサーバコンポーネントで読み込む関数が用意されている
