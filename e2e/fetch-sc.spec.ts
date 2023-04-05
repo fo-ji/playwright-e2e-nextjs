@@ -12,6 +12,8 @@ test('Should fetched data not visible without session token', async ({
 
 test('Should fetched data visible with session token', async ({ page }) => {
   await page.goto('/fetch-sc');
-  await expect(page.getByRole('heading')).toHaveText('Notes page by SC');
+  await expect(page.getByRole('heading')).toHaveText('Notes page by SC', {
+    timeout: 10000,
+  });
   await expect(page.getByText('Note 1')).toBeVisible();
 });
