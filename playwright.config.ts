@@ -10,7 +10,7 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: 'yarn start',
     url: baseURL,
-    timeout: 120 * 1000,
+    // timeout: 120 * 1000,
     reuseExistingServer: true,
   },
   globalSetup: './e2e/config/globalSetup.ts',
