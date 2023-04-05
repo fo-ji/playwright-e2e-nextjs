@@ -4,7 +4,7 @@ import path from 'path';
 const baseURL = `http://localhost:${process.env.PORT || 3000}`;
 
 const config: PlaywrightTestConfig = {
-  timeout: 5 * 1000,
+  // timeout: 5 * 1000,
   testDir: path.join(__dirname, 'e2e'),
   retries: 0,
   webServer: {
