@@ -1,6 +1,8 @@
 'use client';
+
 import type { Note } from '@prisma/client';
 import { useEffect, useState } from 'react';
+import fetch from 'cross-fetch';
 
 export default function FetchCcPage() {
   const [notes, setNotes] = useState<Note[] | null>(null);
