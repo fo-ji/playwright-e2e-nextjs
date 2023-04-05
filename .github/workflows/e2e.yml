@@ -51,6 +51,9 @@ jobs:
       - name: migrate
         run: npx prisma migrate dev
 
+      - name: db-seed
+        run: npx prisma db seed
+
       - name: yarn-test
         run: yarn test
 
