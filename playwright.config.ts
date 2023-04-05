@@ -5,8 +5,8 @@ import path from 'path';
 const PORT = process.env.PORT || 3000;
 
 // Set webServer.url and use.baseURL with the location of the WebServer respecting the correct set port
-// const baseURL = `http://localhost:${PORT}`;
-const baseURL = `http://127.0.0.1:${PORT}`;
+const baseURL = `http://localhost:${PORT}`;
+// const baseURL = `http://127.0.0.1:${PORT}`;
 
 const config: PlaywrightTestConfig = {
   timeout: 5 * 1000,
@@ -14,10 +14,9 @@ const config: PlaywrightTestConfig = {
   retries: 0,
   webServer: {
     command: 'yarn start',
-    // url: baseURL,
+    url: baseURL,
     timeout: 120 * 1000,
     reuseExistingServer: true,
-    port: 3000,
   },
   globalSetup: './e2e/config/globalSetup.ts',
   use: {
