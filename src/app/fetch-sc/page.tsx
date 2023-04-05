@@ -1,6 +1,5 @@
 import type { Note } from '@prisma/client';
 import { cookies } from 'next/headers';
-import fetch from 'cross-fetch';
 
 async function fetchNotes(token: string | undefined) {
   const res = await fetch(
