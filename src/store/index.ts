@@ -1,4 +1,4 @@
-import create from 'zustand/react';
+import create from 'zustand';
 import type { Task } from '@prisma/client';
 
 type EditedTask = Omit<Task, 'createdAt' | 'updatedAt' | 'userId'>;

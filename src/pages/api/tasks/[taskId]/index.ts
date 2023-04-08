@@ -86,7 +86,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
-  // GET, DELETE, POST以外
+  // GET, DELETE, PUT以外
   res.setHeader('Allow', ['GET', 'DELETE', 'PUT']);
   res.status(405).end(`Method ${req.method} is not allowed`);
 };
