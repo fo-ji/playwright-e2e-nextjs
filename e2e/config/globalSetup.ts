@@ -10,15 +10,15 @@ export default async function globalConfig() {
   // MEMO: playwrightではstorageState.jsonでブラウザのセッションを設定できる
 
   // 1. 認証をパスするユーザーを作成
-  await prisma.user.upsert({
+  const user = await prisma.user.upsert({
     // 1-1. emailでデータが存在するか確認
     where: {
-      email: 'udemy@test.com',
+      email: 'udemy@example.com',
     },
     // 1-2. なければ新規作成
     create: {
       name: 'userA',
-      email: 'udemy@test.com',
+      email: 'udemy@example.com',
       sessions: {
         create: {
           expires: new Date(
@@ -44,10 +44,30 @@ export default async function globalConfig() {
     update: {},
   });
 
-  // 2. テスト環境のブラウザを立ち上げる
+  // 2. 認証ユーザーに紐付くタスクを作成
+  const taskIds = [
+    '4dd0db39-f099-a513-732e-12297a854a1f',
+    '6fc76eff-a023-ff4a-350f-fbf002b6bf7e',
+  ];
+  const query = taskIds.map((id, idx) =>
+    prisma.task.upsert({
+      where: { id },
+      create: {
+        id,
+        title: `Task ${idx + 1}`,
+        completed: false,
+        userId: user.id,
+      },
+      update: {},
+    })
+  );
+  // $transaction APIで同一トランザクションで実行
+  await prisma.$transaction([...query]);
+
+  // 3. テスト環境のブラウザを立ち上げる
   const browser = await chromium.launch();
 
-  // 3. cookieを付与する
+  // 4. cookieを付与する
   const context = await browser.newContext();
   await context.addCookies([
     {
@@ -61,7 +81,7 @@ export default async function globalConfig() {
     },
   ]);
 
-  // 4. context(session情報)をjsonファイルに書き出す
+  // 5. context(session情報)をjsonファイルに書き出す
   await context.storageState({ path: storagePath });
 
   await browser.close();

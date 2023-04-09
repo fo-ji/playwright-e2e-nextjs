@@ -12,15 +12,19 @@ const config: PlaywrightTestConfig = {
   testDir: path.join(__dirname, 'e2e'),
   retries: 0,
   webServer: {
-    command: 'yarn start',
+    command: 'yarn dev',
     url: baseURL,
     timeout: 120 * 1000,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
   globalSetup: './e2e/config/globalSetup.ts',
   use: {
     baseURL,
     storageState: './e2e/config/storageState.json',
+    video: 'retain-on-failure',
+    // launchOptions: {
+    //   slowMo: 1000,
+    // },
   },
   reporter: [['html', { open: 'never' }]],
   projects: [
