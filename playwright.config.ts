@@ -21,6 +21,10 @@ const config: PlaywrightTestConfig = {
   use: {
     baseURL,
     storageState: './e2e/config/storageState.json',
+    video: 'retain-on-failure',
+    // launchOptions: {
+    //   slowMo: 1000,
+    // },
   },
   reporter: [['html', { open: 'never' }]],
   projects: [
